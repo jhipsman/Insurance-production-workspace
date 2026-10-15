@@ -15,7 +15,41 @@ A local-first productivity workspace for a commercial insurance Client Executive
 
 SOV Builder, BOR Eligibility, and the Submission Knowledge Library are deliberately presented as later-phase modules. The application does not claim carrier access, underwriting insight, or document analysis that has not been verified.
 
-## Development
+## Phase 2 — prospect research and screening
+
+Open **Prospecting Desk → Research & screening** for:
+
+- Ranked prospects with a transparent, rule-based score and individual point breakdowns.
+- Authorized CRM CSV imports, column mapping, dated evidence sources, and manual identity confirmation.
+- Contact decisions that retain existing restrictions and account for relationships, do-not-contact flags, recalls, recent activity, stale exports, and missing evidence.
+- Historical bound-deal analysis grouped by industry, with known premium totals and missing-premium counts.
+- Agency rule settings for recency, freshness, territory, preferred industries, revenue, and employee targets.
+- Duplicate candidate review with reversible decisions; records and linked submissions are never automatically merged or deleted.
+
+Download the fictional sample CSVs from the research screen and import each using
+the corresponding button. Their export date is **2026-10-15**. Sample evidence
+will eventually become stale under the configured freshness rule, as real evidence
+would. No historical data or inferred results are inserted into existing workspaces.
+
+CSV limits: 5 MB and 5,000 records per evidence import. Dates use `YYYY-MM-DD`;
+flags accept yes/no, true/false, or 1/0. Blank or unfamiliar flags stay unknown.
+Bound imports require a bound date and one aggregate row per organization, state,
+and date. Overlapping bound records are rejected to avoid double-counting; remove
+an older overlapping source before importing a replacement. CRM conflicts are
+retained and evaluated conservatively. A similar name only suggests a match;
+confirm the identity in **Review score & matches** before relying on its evidence.
+
+Scores are fit indicators, not probability of binding or estimates of future
+premium. Historical success contributes points only when imported deals support
+it. Contact clearance is separate from fit and is recalculated from current rules
+and export age. Prior restricted accounts stay restricted. Default rules are
+illustrative and must be checked against your agency's actual policies.
+
+Research, match decisions, duplicate decisions, and rules persist in IndexedDB
+and are included in backups. Phase 1 backups remain compatible and open without
+invented research evidence. **Do not import client data into the public demo.**
+
+## Development setup
 
 Prerequisites: Node.js 22+ and npm 10+. No administrator rights are needed if Node is already available.
 

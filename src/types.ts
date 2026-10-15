@@ -54,6 +54,7 @@ export interface Activity { id: string; title: string; detail: string; occurredA
 
 export interface WorkspaceData {
   version: 1
+  research?: import('./data/research').Research
   prospects: Prospect[]
   submissions: Submission[]
   placementRequests: PlacementRequest[]

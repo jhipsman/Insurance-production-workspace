@@ -40,10 +40,42 @@ Clearance uses `Cleared | Needs Review | Restricted`. It is intentionally separa
 ## Phased plan
 
 1. **Phase 1 — implemented:** shell, dashboard, prospect CSV mapping and list, CRM links, submission Kanban/checklists, placement-request review, IndexedDB, backup/restore, fictional data, and tests.
-2. **Phase 2:** authorized historical-bound analysis, explicit agency-rule configuration, CRM export reconciliation, transparent similarity factors, and stronger duplicate review.
+2. **Phase 2 — implemented:** authorized historical-bound analysis, explicit agency-rule configuration, CRM export reconciliation, transparent fit factors, and reversible duplicate review. See the Phase 2 model below.
 3. **Phase 3:** approved Excel SOV template round-trip tests, verified carrier/BOR reference records, and application recommendation library.
 4. **Phase 4:** approved local PDF/XLSX/ZIP analysis, historical comparisons, and evidence-linked underwriting guidance.
 
-## Security design notes
+## Phase 2 model and decision boundaries
+
+`WorkspaceData.research` is an additive optional field, preserving Phase 1 backup
+compatibility. It contains immutable imported evidence batches, configurable agency
+rules, explicit CRM identity decisions, and duplicate-review decisions. Each batch
+records its filename, import time, export date, and row identifiers. Older or
+conflicting sources remain visible until explicitly removed by the user.
+
+`src/data/research.ts` owns import validation, candidate matching, contact decisions,
+scoring, industry aggregation, and backup validation. `ProspectResearch.tsx` provides
+the review UI. The existing prospect list uses the same contact-decision function
+so screening status does not contradict the research view. Scores and clearance
+are derived rather than stored, avoiding stale results after rule edits.
+
+Name matching uses normalized bigram similarity with a conservative candidate
+threshold, not an identity guarantee. All CRM identities require human confirmation.
+Clearance requires current evidence, explicit no-relationship/no-restriction fields,
+and an activity date outside the configured restriction window. Missing matches,
+unknown activity, stale exports, or unresolved candidates require review; confirmed
+restrictions take precedence. Existing restricted prospect records remain restricted.
+
+Fit scoring totals 100 points: 25 for same-industry bound history, 20 for a similarly
+sized bound account in that industry, 20 for preferred industry, 15 for revenue fit,
+10 for employee fit, and 10 for territory fit. Size similarity means reported revenue
+or employees within a factor of two. Historical premium is reported only as an
+aggregate of known imported amounts; no win probability or opportunity value is
+invented. Duplicate review marks same/different without destructive merging.
+
+Current limits: single-user browser storage; no background CRM synchronization;
+no automatic resolution of renamed or unrelated-name organizations; no automatic
+merge; no prediction model; evidence imports limited to 5 MB / 5,000 rows.
+
+## Network boundary
 
 There is no network client in application code and no background transmission. Dependency delivery happens only during development/build. Production uses system fonts and bundled assets. Example external URLs use the reserved `.invalid` domain so demonstration data cannot accidentally open a real client system.
