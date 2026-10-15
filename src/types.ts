@@ -16,6 +16,13 @@ export interface Prospect {
   priority: boolean
   crmUrl?: string
   notes?: string
+  contactName?: string
+  contactEmail?: string
+  contactPhone?: string
+  website?: string
+  streetAddress?: string
+  renewalDate?: string
+  followUpDate?: string
   updatedAt: string
 }
 

@@ -17,6 +17,16 @@ SOV Builder, BOR Eligibility, and the Submission Knowledge Library are deliberat
 
 ## Phase 2 — prospect research and screening
 
+To enter data, click an account name or **Edit details** in the Prospecting Desk.
+Use **Add prospect** to enter an account manually. The editor supports organization
+name, industry/operations, address, city/state, annual revenue, employees, contact
+name/email/phone, website, CRM link, renewal date, next follow-up, notes, and priority.
+Click **Save prospect** to retain changes; **Cancel** discards the draft. These
+details persist locally and are included in workspace backups. No submission is
+created by editing or adding a prospect. Editing a prospect does not rewrite an
+existing submission's account details. Changing organization name or location
+reopens prior identity and duplicate decisions for review; restrictions remain.
+
 Open **Prospecting Desk → Research & screening** for:
 
 - Ranked prospects with a transparent, rule-based score and individual point breakdowns.
