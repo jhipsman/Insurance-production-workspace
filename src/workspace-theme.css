@@ -1,4 +1,13 @@
 /* Shared presentation layer for the light, conversational workspace. */
+.coverage-editor { margin-bottom:22px; }
+.coverage-editor fieldset { border:0; padding:0; margin:0 0 14px; min-width:0; }
+.coverage-editor legend { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+.coverage-editor p { font-size:12px; color:#626970; line-height:1.5; }
+.coverage-options { display:grid; gap:10px; }
+.coverage-options label { display:flex; align-items:flex-start; gap:8px; font-size:12px; line-height:1.5; cursor:pointer; }
+.coverage-options input { accent-color:#28745e; flex-shrink:0; margin-top:3px; }
+.custom-coverage { display:grid; gap:6px; font-size:12px; margin:12px 0 8px; }
+.custom-coverage input { min-width:0; width:100%; border:1px solid #dce1de; border-radius:7px; padding:9px; }
 .prospect-form h3 { grid-column:1/-1; margin:14px 0 2px; font-size:14px; color:#253d33; }
 .form-grid .prospect-priority { flex-direction:row; align-items:center; gap:9px; font-size:13px; }
 .prospect-priority input { width:17px; height:17px; accent-color:#28745e; }

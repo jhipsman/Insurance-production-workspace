@@ -17,6 +17,12 @@ SOV Builder, BOR Eligibility, and the Submission Knowledge Library are deliberat
 
 ## Phase 2 — prospect research and screening
 
+In **Submission Center**, open an account card and use **Coverages** in its detail
+panel to select or remove coverage lines. Use **Other coverage → Add coverage**
+for a custom line. Changes save automatically and appear on the account card;
+coverage selections are included in backups. Review the editable checklist after
+changing coverages; coverage selections do not remove or overwrite checklist items.
+
 To enter data, click an account name or **Edit details** in the Prospecting Desk.
 Use **Add prospect** to enter an account manually. The editor supports organization
 name, industry/operations, address, city/state, annual revenue, employees, contact
