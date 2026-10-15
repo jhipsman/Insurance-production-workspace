@@ -16,12 +16,12 @@ const open=()=>fireEvent.click(screen.getByRole('button',{name:/Harborlight Yout
 
 it('adds and removes submission coverages, retains edits when reopened, and backs them up',()=>{
   render(<Harness/>);open()
-  expect(screen.getByRole('checkbox',{name:'Commercial Auto',exact:true})).toBeChecked()
-  fireEvent.click(screen.getByRole('checkbox',{name:'Cyber',exact:true}))
-  fireEvent.click(screen.getByRole('checkbox',{name:'Commercial Auto',exact:true}))
+  expect(screen.getByRole('checkbox',{name:'Commercial Auto'})).toBeChecked()
+  fireEvent.click(screen.getByRole('checkbox',{name:'Cyber'}))
+  fireEvent.click(screen.getByRole('checkbox',{name:'Commercial Auto'}))
   fireEvent.click(screen.getByRole('button',{name:'Close'}));open()
-  expect(screen.getByRole('checkbox',{name:'Cyber',exact:true})).toBeChecked()
-  expect(screen.getByRole('checkbox',{name:'Commercial Auto',exact:true})).not.toBeChecked()
+  expect(screen.getByRole('checkbox',{name:'Cyber'})).toBeChecked()
+  expect(screen.getByRole('checkbox',{name:'Commercial Auto'})).not.toBeChecked()
   const data=parseBackup(serializeBackup(saved()))
   expect(data.submissions.find(s=>s.id==='s2')?.coverages).toEqual(['General Liability','Umbrella','Cyber'])
   expect(data.submissions.find(s=>s.id==='s2')?.checklist).toEqual(sampleData.submissions.find(s=>s.id==='s2')?.checklist)
