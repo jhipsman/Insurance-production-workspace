@@ -1,18 +1,22 @@
-import { useState } from 'react'
-import type { ChecklistItem, Submission, SubmissionStage, WorkspaceData } from '../types'
-import { Badge, Icon, Modal, Progress } from '../components/UI'
-import { CoverageEditor } from '../components/CoverageEditor'
+import { useState, type Dispatch, type SetStateAction } from 'react'
+import type { WorkspaceData } from '../types'
+import type { AccountTarget } from '../data/accounts'
+import { Icon, Progress, Empty } from '../components/UI'
+import { AccountPanel } from '../components/AccountPanel'
+import { submissionStages } from '../components/SubmissionWork'
 
-const stages: SubmissionStage[] = ['Preparing', 'Ready to Market', 'In Market', 'Proposal', 'Bound']
-
-export function Submissions({ data, setData }: { data: WorkspaceData; setData: React.Dispatch<React.SetStateAction<WorkspaceData>> }) {
-  const [selectedId, setSelectedId] = useState<string>(); const [newItem, setNewItem] = useState('')
-  const selected = data.submissions.find(s=>s.id===selectedId)
-  const update = (id: string, changes: Partial<Submission>) => setData(d=>({...d, submissions:d.submissions.map(s=>s.id===id?{...s,...changes,updatedAt:new Date().toISOString().slice(0,10)}:s)}))
-  const updateCheck = (sub: Submission, item: ChecklistItem, changes: Partial<ChecklistItem>) => update(sub.id,{checklist:sub.checklist.map(i=>i.id===item.id?{...i,...changes}:i)})
-  const addCheck = () => { if (!selected || !newItem.trim()) return; update(selected.id,{checklist:[...selected.checklist,{id:`check-${Date.now()}`,label:newItem.trim(),complete:false,required:true}]}); setNewItem('') }
-  return <div className="page"><div className="page-title"><div><span className="eyebrow">Placement preparation</span><h1>Submission Center</h1><p>Move complete, review-ready accounts through a deliberate marketing workflow.</p></div></div>
-    <div className="kanban">{stages.map(stage=><section className="kanban-column" key={stage}><div className="kanban-head"><span>{stage}</span><b>{data.submissions.filter(s=>s.stage===stage).length}</b></div>{data.submissions.filter(s=>s.stage===stage).map(sub=>{const complete=sub.checklist.filter(i=>i.complete).length; const pct=Math.round(complete/sub.checklist.length*100); return <button className="submission-card" key={sub.id} onClick={()=>setSelectedId(sub.id)}><div className="card-top"><span className="mini-avatar">{sub.accountName.split(' ').slice(0,2).map(x=>x[0]).join('')}</span><Icon name="more"/></div><strong>{sub.accountName}</strong><span>{sub.industry}</span><div className="coverage-tags">{sub.coverages.slice(0,2).map(c=><small key={c}>{c}</small>)}{sub.coverages.length>2&&<small>+{sub.coverages.length-2}</small>}</div><div className="card-progress"><span>{complete} of {sub.checklist.length} ready</span><b>{pct}%</b></div><Progress value={pct}/><div className="card-foot"><span>Follow up {sub.followUp}</span><span>→</span></div></button>})}</section>)}</div>
-    {selected && <Modal title={selected.accountName} onClose={()=>setSelectedId(undefined)} wide><div className="detail-meta"><Badge tone="blue">{selected.stage}</Badge><span>{selected.industry}</span><span>Updated {selected.updatedAt}</span></div><div className="detail-grid"><div><section className="detail-section"><div className="panel-head"><div><span className="eyebrow">Workflow</span><h3>Submission stage</h3></div></div><div className="stage-picker">{stages.map(stage=><button className={stage===selected.stage?'active':''} onClick={()=>update(selected.id,{stage})} key={stage}>{stage}</button>)}</div></section><section className="detail-section"><div className="panel-head"><div><span className="eyebrow">Requirements</span><h3>Pre-submission checklist</h3></div><span>{selected.checklist.filter(i=>i.complete).length}/{selected.checklist.length}</span></div><div className="checklist">{selected.checklist.map(item=><div key={item.id}><button className={`checkbox ${item.complete?'checked':''}`} onClick={()=>updateCheck(selected,item,{complete:!item.complete})}>{item.complete&&<Icon name="check" size={14}/>}</button><input aria-label="Checklist description" value={item.label} onChange={e=>updateCheck(selected,item,{label:e.target.value})}/><button className="remove" aria-label="Remove item" onClick={()=>update(selected.id,{checklist:selected.checklist.filter(i=>i.id!==item.id)})}>×</button></div>)}</div><div className="add-row"><input value={newItem} onChange={e=>setNewItem(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addCheck()} placeholder="Add a custom requirement…"/><button className="btn small" onClick={addCheck}>Add</button></div></section></div><aside className="detail-aside"><h3>Account shortcuts</h3>{[['CRM record',selected.crmUrl],['Indio workspace',selected.indioUrl],['Tailwind record',selected.tailwindUrl]].map(([label,url])=>url?<a href={url} target="_blank" rel="noreferrer" key={label}>{label}<Icon name="external" size={16}/></a>:<span key={label}>{label}<small>Not configured</small></span>)}<CoverageEditor key={selected.id} value={selected.coverages} onChange={coverages=>update(selected.id,{coverages})}/><div className="info-card"><strong>Checklist guidance</strong><p>Requirements are suggestions based on selected coverages and operations. Review and customize every item before marketing.</p></div></aside></div></Modal>}
+export function Submissions({data,setData,onOpen}:{data:WorkspaceData;setData:Dispatch<SetStateAction<WorkspaceData>>;onOpen?:(target:AccountTarget)=>void}) {
+  const [target,setTarget]=useState<AccountTarget>()
+  const open=onOpen??setTarget
+  return <div className="page">
+    <div className="page-title"><div><span className="eyebrow">Pipeline</span><h1>Submission Center</h1><p>Open any account for its details, coverages, checklist, and carrier requests.</p></div></div>
+    {!data.submissions.length&&<Empty title="No active submissions" detail="Start a submission from an account in the Prospecting Desk."/>}
+    <div className="kanban">{submissionStages.map(stage=><section className="kanban-column" key={stage}><div className="kanban-head"><span>{stage}</span><b>{data.submissions.filter(s=>s.stage===stage).length}</b></div>{data.submissions.filter(s=>s.stage===stage).map(sub=>{
+      const complete=sub.checklist.filter(i=>i.complete).length
+      const pct=sub.checklist.length?Math.round(complete/sub.checklist.length*100):0
+      const outstanding=data.placementRequests.filter(r=>r.submissionId===sub.id&&r.status!=='Complete').length
+      return <button className="submission-card" key={sub.id} onClick={()=>open({submissionId:sub.id,tab:'submission'})}><div className="card-top"><span className="mini-avatar">{sub.accountName.split(' ').slice(0,2).map(x=>x[0]).join('')}</span><Icon name="more"/></div><strong>{sub.accountName}</strong><span>{sub.industry}</span><div className="coverage-tags">{sub.coverages.slice(0,2).map(c=><small key={c}>{c}</small>)}{sub.coverages.length>2&&<small>+{sub.coverages.length-2}</small>}</div><div className="card-progress"><span>{complete} of {sub.checklist.length} ready</span><b>{pct}%</b></div><Progress value={pct}/><div className="card-foot"><span>{outstanding} carrier requests</span><span>{sub.followUp||'No follow-up set'}</span></div></button>
+    })}</section>)}</div>
+    {target&&!onOpen&&<AccountPanel key={target.submissionId} target={target} data={data} setData={setData} onClose={()=>setTarget(undefined)}/>}
   </div>
 }

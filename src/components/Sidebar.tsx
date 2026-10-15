@@ -2,10 +2,8 @@ import type { Section } from '../types'
 import { Icon } from './UI'
 
 const items: { id: Section; label: string; phase?: string }[] = [
-  { id: 'dashboard', label: 'Dashboard' }, { id: 'prospects', label: 'Prospecting Desk' },
-  { id: 'submissions', label: 'Submission Center' }, { id: 'placement', label: 'Placement Requests' },
-  { id: 'sov', label: 'SOV Builder', phase: 'Later' }, { id: 'bor', label: 'BOR Eligibility', phase: 'Later' },
-  { id: 'library', label: 'Knowledge Library', phase: 'Later' },
+  { id: 'dashboard', label: 'Today' }, { id: 'prospects', label: 'Prospecting Desk' },
+  { id: 'submissions', label: 'Submission Center' }, { id: 'placement', label: 'Outstanding items' },
 ]
 
 export function Sidebar({ active, onChange, open, onClose }: { active: Section; onChange: (s: Section) => void; open: boolean; onClose: () => void }) {

@@ -1,19 +1,30 @@
-import { useMemo, useState } from 'react'
-import { suggestedRequestLines } from '../data/requestParser'
-import type { ItemStatus, PlacementRequest, WorkspaceData } from '../types'
-import { Badge, Modal } from '../components/UI'
+import { useState, type Dispatch, type SetStateAction } from 'react'
+import type { WorkspaceData } from '../types'
+import type { AccountTarget } from '../data/accounts'
+import { Empty } from '../components/UI'
+import { RequestRow } from '../components/CarrierRequests'
+import { AccountPanel } from '../components/AccountPanel'
 
-export function Placement({ data, setData }: { data: WorkspaceData; setData: React.Dispatch<React.SetStateAction<WorkspaceData>> }) {
-  const [account, setAccount] = useState('All'); const [compose, setCompose] = useState(false); const [submissionId,setSubmissionId]=useState(data.submissions[0]?.id??''); const [carrier,setCarrier]=useState(''); const [subject,setSubject]=useState(''); const [body,setBody]=useState(''); const [lines,setLines]=useState<string[]>([])
-  const shown = data.placementRequests.filter(r=>account==='All'||r.accountName===account)
-  const grouped = useMemo(()=>Object.entries(shown.reduce<Record<string,PlacementRequest[]>>((acc,r)=>{(acc[r.accountName]??=[]).push(r);return acc},{})),[shown])
-  const update=(id:string,changes:Partial<PlacementRequest>)=>setData(d=>({...d,placementRequests:d.placementRequests.map(r=>r.id===id?{...r,...changes}:r)}))
-  function parse(){setLines(suggestedRequestLines(body))}
-  function save(){const sub=data.submissions.find(s=>s.id===submissionId); if(!sub||!carrier.trim()||!lines.length)return; const additions=lines.map((description,i):PlacementRequest=>({id:`request-${Date.now()}-${i}`,submissionId:sub.id,accountName:sub.accountName,carrier:carrier.trim(),description,status:'Open',answer:'',documentRef:'',dateReceived:new Date().toISOString().slice(0,10),sourceEmail:subject||'Pasted placement email',sharedKey:description.toLowerCase().replace(/[^a-z0-9]+/g,'-')})); setData(d=>({...d,placementRequests:[...additions,...d.placementRequests]}));setCompose(false);setBody('');setSubject('');setCarrier('');setLines([])}
-  const cycle=(status:ItemStatus):ItemStatus=>status==='Open'?'In progress':status==='In progress'?'Complete':'Open'
-  return <div className="page"><div className="page-title"><div><span className="eyebrow">Carrier follow-up</span><h1>Placement Request Tracker</h1><p>Turn scattered carrier requests into one accountable, account-level checklist.</p></div><button className="btn primary" onClick={()=>setCompose(true)}>+ Add from email</button></div>
-    <div className="summary-strip"><div><strong>{shown.filter(r=>r.status!=='Complete').length}</strong><span>Outstanding</span></div><div><strong>{shown.filter(r=>r.status==='In progress').length}</strong><span>In progress</span></div><div><strong>{shown.filter(r=>r.status==='Complete').length}</strong><span>Completed</span></div><label><span>Account</span><select value={account} onChange={e=>setAccount(e.target.value)}><option>All</option>{[...new Set(data.placementRequests.map(r=>r.accountName))].map(x=><option key={x}>{x}</option>)}</select></label></div>
-    <div className="request-groups">{grouped.map(([name,requests])=><section className="panel request-group" key={name}><div className="panel-head"><div><span className="eyebrow">Account</span><h2>{name}</h2></div><Badge tone="amber">{requests.filter(r=>r.status!=='Complete').length} outstanding</Badge></div><div className="request-table">{requests.map(r=><div className={r.status==='Complete'?'done':''} key={r.id}><button className={`status-check ${r.status==='Complete'?'checked':''}`} onClick={()=>update(r.id,{status:cycle(r.status)})}>{r.status==='Complete'?'✓':r.status==='In progress'?'–':''}</button><div className="grow"><input className="request-title" value={r.description} onChange={e=>update(r.id,{description:e.target.value})}/><span>{r.carrier} · Received {r.dateReceived} · {r.sourceEmail}</span><input className="inline-note" value={r.answer} onChange={e=>update(r.id,{answer:e.target.value})} placeholder="Add answer or working note…"/></div><Badge tone={r.status==='Complete'?'green':r.status==='In progress'?'blue':'neutral'}>{r.status}</Badge></div>)}</div></section>)}</div>
-    {compose&&<Modal title="Review a placement email" onClose={()=>setCompose(false)} wide><p className="modal-intro">Paste an authorized email. Basic local parsing suggests lines; review every item before saving. Nothing leaves this browser.</p><div className="form-grid"><label>Account<select value={submissionId} onChange={e=>setSubmissionId(e.target.value)}>{data.submissions.map(s=><option value={s.id} key={s.id}>{s.accountName}</option>)}</select></label><label>Carrier<input value={carrier} onChange={e=>setCarrier(e.target.value)} placeholder="e.g. Philadelphia"/></label><label className="full">Email subject<input value={subject} onChange={e=>setSubject(e.target.value)} placeholder="Carrier needs more information"/></label><label className="full">Email body<textarea rows={6} value={body} onChange={e=>setBody(e.target.value)} placeholder="Paste the email body here…"/></label></div><button className="btn" onClick={parse}>Suggest request items</button>{lines.length>0&&<div className="parsed-lines"><strong>Review suggested items</strong>{lines.map((line,i)=><div key={i}><input value={line} onChange={e=>setLines(lines.map((x,j)=>j===i?e.target.value:x))}/><button onClick={()=>setLines(lines.filter((_,j)=>j!==i))}>×</button></div>)}</div>}<div className="modal-actions"><button className="btn" onClick={()=>setCompose(false)}>Cancel</button><button className="btn primary" disabled={!lines.length||!carrier.trim()} onClick={save}>Save {lines.length} requests</button></div></Modal>}
+export function Placement({data,setData,onOpen}:{data:WorkspaceData;setData:Dispatch<SetStateAction<WorkspaceData>>;onOpen?:(target:AccountTarget)=>void}) {
+  const [account,setAccount]=useState(''),[showComplete,setShowComplete]=useState(false),[target,setTarget]=useState<AccountTarget>()
+  const open=onOpen??setTarget
+  const submissions=data.submissions.filter(s=>!account||s.id===account)
+  const requests=data.placementRequests.filter(r=>(!account||r.submissionId===account)&&(showComplete||r.status!=='Complete'))
+  const checklist=submissions.flatMap(s=>s.checklist.filter(i=>showComplete||!i.complete).map(item=>({submission:s,item})))
+  const ids=[...new Set([...requests.map(r=>r.submissionId),...checklist.map(c=>c.submission.id)])]
+  return <div className="page">
+    <div className="page-title"><div><span className="eyebrow">Work queue</span><h1>Outstanding items</h1><p>Submission requirements and carrier questions that need an answer.</p></div></div>
+    <div className="queue-filters"><label>Account<select value={account} onChange={e=>setAccount(e.target.value)}><option value="">All accounts</option>{data.submissions.map(s=><option key={s.id} value={s.id}>{s.accountName}</option>)}</select></label><label className="inline-check"><input type="checkbox" checked={showComplete} onChange={e=>setShowComplete(e.target.checked)}/>Include completed</label></div>
+    {!ids.length&&<Empty title="You're caught up" detail="New submission requirements and carrier requests will appear here."/>}
+    <div className="request-groups">{ids.map(id=>{
+      const sub=data.submissions.find(s=>s.id===id)
+      const rows=requests.filter(r=>r.submissionId===id)
+      const checks=checklist.filter(c=>c.submission.id===id)
+      return <section className="panel" key={id}><div className="panel-head"><h2>{sub?.accountName??rows[0]?.accountName??'Unlinked requests'}</h2>{sub&&<button className="btn small" onClick={()=>open({submissionId:id,tab:rows.length?'requests':'submission'})}>Open account</button>}</div>
+        {checks.length>0&&<div className="queue-checklist"><h3>Submission requirements</h3>{checks.map(({item})=><label key={item.id}><input type="checkbox" checked={item.complete} onChange={e=>setData(d=>({...d,submissions:d.submissions.map(s=>s.id===id?{...s,updatedAt:new Date().toISOString().slice(0,10),checklist:s.checklist.map(i=>i.id===item.id?{...i,complete:e.target.checked}:i)}:s)}))}/>{item.label}</label>)}</div>}
+        {rows.length>0&&<><h3 className="queue-heading">Carrier requests</h3>{rows.map(r=><RequestRow key={r.id} request={r} setData={setData}/>)}</>}
+      </section>
+    })}</div>
+    {target&&!onOpen&&<AccountPanel key={target.submissionId} target={target} data={data} setData={setData} onClose={()=>setTarget(undefined)}/>}
   </div>
 }

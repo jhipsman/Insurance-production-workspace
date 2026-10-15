@@ -27,8 +27,10 @@ export interface Prospect {
 }
 
 export interface ChecklistItem { id: string; label: string; complete: boolean; required: boolean }
+export type AccountDetails = Pick<Prospect, 'name' | 'city' | 'state' | 'industry' | 'revenue' | 'employees' | 'crmUrl' | 'notes' | 'priority' | 'contactName' | 'contactEmail' | 'contactPhone' | 'website' | 'streetAddress' | 'renewalDate' | 'followUpDate'>
 
 export interface Submission {
+  accountDetails?: AccountDetails
   id: string
   prospectId?: string
   accountName: string

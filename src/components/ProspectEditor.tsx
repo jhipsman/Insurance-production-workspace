@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react'
-import type { Prospect } from '../types'
+import type { AccountDetails, Prospect } from '../types'
 import { Modal } from './UI'
 
-export type ProspectDetails = Pick<Prospect, 'name' | 'city' | 'state' | 'industry' | 'revenue' | 'employees' | 'crmUrl' | 'notes' | 'priority' | 'contactName' | 'contactEmail' | 'contactPhone' | 'website' | 'streetAddress' | 'renewalDate' | 'followUpDate'>
+export type ProspectDetails = AccountDetails
 
-export function ProspectEditor({ prospect, onSave, onClose }: { prospect?: Prospect; onSave: (details: ProspectDetails) => void; onClose: () => void }) {
+export function ProspectEditor({ prospect, onSave, onClose, embedded = false }: { prospect?: Prospect; onSave: (details: ProspectDetails) => void; onClose: () => void; embedded?: boolean }) {
   const [draft,setDraft] = useState({
     name:prospect?.name??'',city:prospect?.city??'',state:prospect?.state??'',industry:prospect?.industry??'',
     revenue:prospect?.revenue?String(prospect.revenue):'',employees:prospect?.employees?String(prospect.employees):'',
@@ -27,9 +27,9 @@ export function ProspectEditor({ prospect, onSave, onClose }: { prospect?: Prosp
     onSave({...draft,name:draft.name.trim(),city:draft.city.trim(),state:draft.state.trim().toUpperCase(),industry:draft.industry.trim()||'Unclassified',revenue,employees,crmUrl:draft.crmUrl.trim(),website:draft.website.trim(),contactEmail:draft.contactEmail.trim()})
   }
   const field=(key:Exclude<keyof typeof draft,'priority'|'notes'>,label:string,type='text')=><label key={key}>{label}<input type={type} value={draft[key]} onChange={e=>change(key,e.target.value)} required={key==='name'} min={type==='number'?'0':undefined} step={key==='employees'?'1':key==='revenue'?'0.01':undefined} autoComplete="off"/></label>
-  return <Modal title={prospect?'Edit prospect':'Add prospect'} onClose={onClose} wide>
+  const form = (
     <form onSubmit={submit}>
-      <p className="modal-intro">Save account details here at any stage. Contact availability is evaluated separately from CRM evidence and agency rules.</p>
+      <p className="modal-intro">Contacts, notes, and follow-ups for this account.</p>
       <div className="form-grid prospect-form">
         <h3>Organization</h3>
         {field('name','Organization name')}{field('industry','Industry / operations')}
@@ -44,7 +44,8 @@ export function ProspectEditor({ prospect, onSave, onClose }: { prospect?: Prosp
         <label className="full prospect-priority"><input type="checkbox" checked={draft.priority} onChange={e=>change('priority',e.target.checked)}/>Save as a priority prospect</label>
       </div>
       {error&&<p className="research-error" role="alert">{error}</p>}
-      <div className="modal-actions"><button type="button" className="btn" onClick={onClose}>Cancel</button><button type="submit" className="btn primary">Save prospect</button></div>
+      <div className="modal-actions"><button type="button" className="btn" onClick={onClose}>Cancel</button><button type="submit" className="btn primary">{embedded?'Save account':'Save prospect'}</button></div>
     </form>
-  </Modal>
+  )
+  return embedded ? form : <Modal title={prospect?'Edit prospect':'Add prospect'} onClose={onClose} wide>{form}</Modal>
 }

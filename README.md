@@ -4,36 +4,54 @@ A local-first productivity workspace for a commercial insurance Client Executive
 
 ## Phase 1 capabilities
 
-- Dashboard for priorities, active submissions, missing items, and follow-ups
+- Today view for due follow-ups, missing requirements, and carrier questions
 - Searchable Prospecting Desk with priority and contact-clearance states
 - Client-side CSV import with detected columns, field mapping, and preview
 - One-click prospect-to-submission workflow
 - Submission Kanban with editable starter checklists
-- Placement Request Tracker with locally parsed, manually reviewed email text
+- Carrier requests inside accounts, plus an Outstanding items queue across accounts
 - IndexedDB persistence and portable JSON backup/restore
 - Responsive, static frontend with no backend, telemetry, or automatic upload
 
-SOV Builder, BOR Eligibility, and the Submission Knowledge Library are deliberately presented as later-phase modules. The application does not claim carrier access, underwriting insight, or document analysis that has not been verified.
+SOV Builder, BOR Eligibility, and the Submission Knowledge Library are planned for later phases and hidden from navigation until implemented.
+
+## One account, multiple views
+
+The sidebar has **Today**, **Prospecting Desk**, **Submission Center**, and
+**Outstanding items**. Opening an account from any of these views uses the same
+account panel. Its tabs contain account details, submission work (including coverages
+and checklists), carrier requests, and contact review. Saving account details updates
+linked records; coverage/checklist/request edits save automatically. Switching tabs
+keeps your unsaved account-detail draft. Close or Cancel discards an unsaved draft.
+
+The Prospecting Desk includes scores, status, filtering, and sorting in one list.
+Use **Tools** for CSV imports, historical bound analysis, duplicate review, and rules.
+Click the fit score to inspect the evidence in the account's **Contact review** tab.
+The **Outstanding items** queue uses the same checklist and request records as the
+account panel. Completing an item in either place updates the other.
+
+See [workflow research and decisions](docs/WORKFLOW_RESEARCH.md) for the public
+product reference and data-preservation details.
 
 ## Phase 2 — prospect research and screening
 
-In **Submission Center**, open an account card and use **Coverages** in its detail
+In **Submission Center**, open an account card and use **Coverages** in its Submission
 panel to select or remove coverage lines. Use **Other coverage → Add coverage**
 for a custom line. Changes save automatically and appear on the account card;
 coverage selections are included in backups. Review the editable checklist after
 changing coverages; coverage selections do not remove or overwrite checklist items.
 
-To enter data, click an account name or **Edit details** in the Prospecting Desk.
+To enter data, click an account name or **Open account** in the Prospecting Desk.
 Use **Add prospect** to enter an account manually. The editor supports organization
 name, industry/operations, address, city/state, annual revenue, employees, contact
 name/email/phone, website, CRM link, renewal date, next follow-up, notes, and priority.
-Click **Save prospect** to retain changes; **Cancel** discards the draft. These
+Click **Save account** to retain changes (**Save prospect** when creating a new prospect); **Cancel** discards the draft. These
 details persist locally and are included in workspace backups. No submission is
-created by editing or adding a prospect. Editing a prospect does not rewrite an
-existing submission's account details. Changing organization name or location
+created by editing or adding a prospect. Saving account details synchronizes linked
+submission names, industry, CRM links and follow-up dates. Changing organization name or location
 reopens prior identity and duplicate decisions for review; restrictions remain.
 
-Open **Prospecting Desk → Research & screening** for:
+Use the **Prospecting Desk**, its **Tools** section, and the account's **Contact review** tab for:
 
 - Ranked prospects with a transparent, rule-based score and individual point breakdowns.
 - Authorized CRM CSV imports, column mapping, dated evidence sources, and manual identity confirmation.
@@ -42,7 +60,7 @@ Open **Prospecting Desk → Research & screening** for:
 - Agency rule settings for recency, freshness, territory, preferred industries, revenue, and employee targets.
 - Duplicate candidate review with reversible decisions; records and linked submissions are never automatically merged or deleted.
 
-Download the fictional sample CSVs from the research screen and import each using
+Download the fictional sample CSVs from Tools and import each using
 the corresponding button. Their export date is **2026-10-15**. Sample evidence
 will eventually become stale under the configured freshness rule, as real evidence
 would. No historical data or inferred results are inserted into existing workspaces.
@@ -53,7 +71,7 @@ Bound imports require a bound date and one aggregate row per organization, state
 and date. Overlapping bound records are rejected to avoid double-counting; remove
 an older overlapping source before importing a replacement. CRM conflicts are
 retained and evaluated conservatively. A similar name only suggests a match;
-confirm the identity in **Review score & matches** before relying on its evidence.
+confirm the identity in **Contact review** before relying on its evidence.
 
 Scores are fit indicators, not probability of binding or estimates of future
 premium. Historical success contributes points only when imported deals support

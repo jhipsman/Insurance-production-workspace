@@ -1,4 +1,51 @@
 /* Shared presentation layer for the light, conversational workspace. */
+.account-tabs { display:flex; flex-wrap:wrap; gap:8px; padding:18px 24px; border-bottom:1px solid #e7e8eb; background:#f8faf9; position:sticky; top:0; z-index:1; }
+.account-message { margin:12px 24px; color:#245744; font-size:13px; }
+.account-choice { display:flex; align-items:center; gap:12px; padding:16px 24px; font-size:13px; }
+.account-work { padding:24px; display:grid; grid-template-columns:minmax(0,1fr) minmax(200px,.7fr); gap:24px; }
+.account-work>section:first-child { grid-column:1/-1; }
+.account-work h3 { font-size:16px; margin:0 0 14px; }
+.account-work .stage-picker { padding:0; }
+.account-work .checklist input[type=checkbox] { flex:none; width:18px; height:18px; accent-color:#28745e; }
+.account-work .checklist input:not([type=checkbox]) { min-width:0; }
+.account-work .add-row input { min-width:0; }
+.muted { color:#68746d; font-size:13px; line-height:1.6; }
+.account-requests { padding:0 24px 24px; }
+.account-requests>.panel-head { padding-left:0; padding-right:0; }
+.carrier-request { display:flex; align-items:flex-start; gap:14px; padding:20px; border-top:1px solid #e7e8eb; }
+.request-completion input { width:18px; height:18px; accent-color:#28745e; }
+.request-completion span { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.request-field { display:grid; gap:6px; font-size:12px; color:#68746d; margin-top:12px; }
+.request-field input { min-width:0; width:100%; padding:9px; border:1px solid #dce1de; border-radius:8px; background:#f8faf9; }
+.request-complete { background:#f8faf9; }
+.carrier-request .text-btn { display:block; padding:10px 0; }
+.request-composer { border:1px solid #e7e8eb; border-radius:12px; padding:20px 0; margin:18px 0; }
+.composer-actions { display:flex; flex-wrap:wrap; gap:10px; padding:12px 24px; }
+.inline-check { display:flex; gap:8px; align-items:center; font-size:13px; }
+.queue-filters { display:flex; gap:24px; align-items:center; flex-wrap:wrap; margin-bottom:24px; }
+.queue-filters label { display:flex; align-items:center; gap:10px; font-size:13px; }
+.queue-filters select, .account-choice select { padding:10px; border:1px solid #dce1de; border-radius:8px; background:white; }
+.queue-checklist { padding:4px 24px 24px; }
+.queue-checklist label { display:flex; align-items:center; gap:10px; padding:10px 0; font-size:14px; }
+.queue-checklist h3, .queue-heading { font-size:13px; color:#68746d; }
+.queue-heading { padding:0 24px; }
+.attention-metrics { grid-template-columns:repeat(3,1fr); }
+.attention-metrics .metric-card { grid-template-columns:1fr; }
+.attention-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 24px; border-top:1px solid #e7e8eb; }
+.attention-row strong, .attention-row span { display:block; font-size:13px; }
+.attention-row span { color:#68746d; margin-top:5px; }
+.prospect-tools { margin:20px 0; border:1px solid #dce1de; padding:16px; border-radius:16px; background:#f3f6f4; }
+.account-shortcuts { display:flex; flex-wrap:wrap; gap:12px; padding:12px 24px; font-size:13px; }
+@media(max-width:760px) {
+  .account-work { grid-template-columns:1fr; padding:18px; }
+  .account-work .stage-picker { overflow-x:auto; }
+  .account-tabs { padding:12px; }
+  .carrier-request { flex-wrap:wrap; padding:16px 0; }
+  .carrier-request .grow { min-width:180px; }
+  .attention-metrics { grid-template-columns:1fr; }
+  .account-choice select { min-width:0; max-width:100%; }
+  .attention-row { flex-wrap:wrap; }
+}
 .coverage-editor { margin-bottom:22px; }
 .coverage-editor fieldset { border:0; padding:0; margin:0 0 14px; min-width:0; }
 .coverage-editor legend { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
