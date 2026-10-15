@@ -11,7 +11,7 @@ export function Dashboard({ data, navigate }: { data: WorkspaceData; navigate: (
     ['Missing documents', missing.length, 'Across active submissions', 'submissions'],
   ] as const
   return <div className="page dashboard-page">
-    <div className="page-title"><div><span className="eyebrow">Wednesday, October 14</span><h1>Good morning, Jordan.</h1><p>Here’s where your attention will have the most impact today.</p></div><button className="btn primary" onClick={() => navigate('prospects')}>Review priorities</button></div>
+    <div className="page-title"><div><span className="eyebrow">Your workspace</span><h1>Welcome back.</h1><p>Here’s where your attention will have the most impact today.</p></div><button className="btn primary" onClick={() => navigate('prospects')}>Review priorities</button></div>
     <div className="metric-grid">{metrics.map(([label, value, detail, target], index) => <button className="metric-card" key={label} onClick={() => navigate(target)}><div className={`metric-symbol tone-${index}`}>{['◎','↗','✓','!'][index]}</div><span>{label}</span><strong>{value}</strong><small>{detail}</small></button>)}</div>
     <div className="dashboard-grid">
       <section className="panel span-2"><div className="panel-head"><div><span className="eyebrow">Pipeline</span><h2>Active submissions</h2></div><button className="text-btn" onClick={() => navigate('submissions')}>View all →</button></div>
