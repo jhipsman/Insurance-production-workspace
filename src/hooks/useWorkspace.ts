@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { loadWorkspace, saveWorkspace } from '../data/db'
 import { sampleData } from '../sampleData'
 import type { WorkspaceData } from '../types'
+import { removeDemoSubmissions } from '../data/removeDemoSubmissions'
 
 export function useWorkspace() {
-  const [data, setData] = useState<WorkspaceData>(sampleData)
+  const [data, setData] = useState<WorkspaceData>(()=>removeDemoSubmissions(sampleData))
   const [ready, setReady] = useState(false)
   const [saved, setSaved] = useState(true)
 
-  useEffect(() => { loadWorkspace().then(stored => { if (stored) setData(stored); setReady(true) }) }, [])
+  useEffect(() => { loadWorkspace().then(stored => { setData(removeDemoSubmissions(stored??sampleData)); setReady(true) }) }, [])
   useEffect(() => {
     if (!ready) return
     setSaved(false)

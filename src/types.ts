@@ -61,6 +61,11 @@ export interface Activity { id: string; title: string; detail: string; occurredA
 
 export interface WorkspaceData {
   version: 1
+  demoSubmissionCleanup?: {
+    completedAt: string
+    submissions: Submission[]
+    placementRequests: PlacementRequest[]
+  }
   research?: import('./data/research').Research
   prospects: Prospect[]
   submissions: Submission[]
