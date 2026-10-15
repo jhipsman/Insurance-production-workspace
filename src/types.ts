@@ -30,6 +30,7 @@ export interface ChecklistItem { id: string; label: string; complete: boolean; r
 export type AccountDetails = Pick<Prospect, 'name' | 'city' | 'state' | 'industry' | 'revenue' | 'employees' | 'crmUrl' | 'notes' | 'priority' | 'contactName' | 'contactEmail' | 'contactPhone' | 'website' | 'streetAddress' | 'renewalDate' | 'followUpDate'>
 
 export interface Submission {
+  coverageProgress?: { coverage: string; status: SubmissionStage | 'Not tracked'; boundDate?: string }[]
   accountDetails?: AccountDetails
   id: string
   prospectId?: string

@@ -41,6 +41,14 @@ for a custom line. Changes save automatically and appear on the account card;
 coverage selections are included in backups. Review the editable checklist after
 changing coverages; coverage selections do not remove or overwrite checklist items.
 
+Under **Coverage line tracking**, set a separate status and bound date for each
+selected line. The bound date records binding confirmation, not policy inception.
+Changes save automatically and are included in backups. Pipeline cards show the
+number of lines bound. The overall submission stage remains manually controlled;
+existing lines start as **Not tracked**, including on previously bound submissions.
+Changing a line away from Bound clears its bound date. Deselecting a coverage
+hides its tracking but retains it if reselected.
+
 To discard a submission, open its account card, scroll to the bottom of the
 **Submission** tab, and choose **Remove submission**. Confirm the account name,
 then choose **Yes, remove submission** (or **Keep submission** to cancel).

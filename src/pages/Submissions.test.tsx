@@ -14,6 +14,34 @@ function Harness() {
 const saved=():WorkspaceData=>JSON.parse(screen.getByTestId('workspace').textContent!)
 const open=()=>fireEvent.click(screen.getAllByRole('button',{name:/Harborlight Youth Services/})[0])
 
+it('tracks staggered binding independently and retains tracking across reselection, reopening, and backups',()=>{
+  render(<Harness/>);open()
+  expect(screen.getByLabelText('General Liability status')).toHaveValue('Not tracked')
+  fireEvent.change(screen.getByLabelText('General Liability status'),{target:{value:'Bound'}})
+  fireEvent.change(screen.getByLabelText('General Liability bound date'),{target:{value:'2026-10-15'}})
+  fireEvent.change(screen.getByLabelText('Commercial Auto status'),{target:{value:'In Market'}})
+  expect(screen.getByLabelText('Commercial Auto bound date')).toBeDisabled()
+  expect(saved().submissions.find(s=>s.id==='s2')?.stage).toBe('Preparing')
+  fireEvent.click(screen.getByRole('checkbox',{name:'General Liability'}))
+  expect(screen.queryByLabelText('General Liability status')).not.toBeInTheDocument()
+  fireEvent.click(screen.getByRole('checkbox',{name:'General Liability'}))
+  expect(screen.getByLabelText('General Liability bound date')).toHaveValue('2026-10-15')
+  fireEvent.click(screen.getByRole('button',{name:'Close'}));open()
+  expect(screen.getByLabelText('Commercial Auto status')).toHaveValue('In Market')
+  fireEvent.change(screen.getByLabelText('Commercial Auto status'),{target:{value:'Bound'}})
+  fireEvent.change(screen.getByLabelText('Commercial Auto bound date'),{target:{value:'2026-10-22'}})
+  const restored=parseBackup(serializeBackup(saved()))
+  expect(restored.submissions.find(s=>s.id==='s2')?.coverageProgress).toEqual(expect.arrayContaining([
+    {coverage:'General Liability',status:'Bound',boundDate:'2026-10-15'},
+    {coverage:'Commercial Auto',status:'Bound',boundDate:'2026-10-22'},
+  ]))
+  expect(restored.submissions.find(s=>s.id==='s1')).toEqual(sampleData.submissions.find(s=>s.id==='s1'))
+  fireEvent.change(screen.getByLabelText('General Liability status'),{target:{value:'In Market'}})
+  expect(screen.getByLabelText('General Liability bound date')).toHaveValue('')
+  fireEvent.click(screen.getByRole('button',{name:'Close'}))
+  expect(screen.getAllByRole('button',{name:/Harborlight Youth Services/})[0]).toHaveTextContent('1 of 3 lines bound')
+})
+
 it('requires confirmation and can cancel without changing any records',()=>{
   render(<Harness/>);open()
   const before=saved()
