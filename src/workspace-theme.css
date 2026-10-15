@@ -1,0 +1,121 @@
+/* Shared presentation layer for the light, conversational workspace. */
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #24272b;
+  background: #fafafa;
+  --ink: #24272b;
+  --muted: #626970;
+  --line: #e7e8eb;
+}
+body { background: #fafafa; }
+button, a, input, select, textarea { transition: background-color .15s, border-color .15s, box-shadow .15s; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid #438b76;
+  outline-offset: 3px;
+}
+.sidebar { background: #f3f4f5; color: #545b63; border-right: 1px solid var(--line); }
+.brand { padding-bottom: 38px; }
+.brand-mark { background: #242c29; color: white; border-radius: 12px; font-family: inherit; }
+.brand strong { color: #252b29; font-family: inherit; }
+.brand span { color: #6e7772; text-transform: none; letter-spacing: 0; font-size: 12px; }
+.sidebar nav { gap: 7px; }
+.sidebar nav button { color: #59616a; border-radius: 10px; padding: 12px; font-size: 13px; }
+.sidebar nav button:hover { background: #e9ebed; color: #24272b; }
+.sidebar nav button.active { background: #e2ebe6; color: #245744; }
+.sidebar nav button.active:before { display: none; }
+.sidebar nav small { background: #e7e9eb; color: #69727b; text-transform: none; }
+.sidebar-foot { border-color: #dfe3e1; }
+.sidebar-foot strong { color: #46544d; }
+.sidebar-foot span { color: #65746c; font-size: 11px; }
+.local-dot { background: #419876; box-shadow: 0 0 0 4px #e0eee7; }
+.topbar { background: #ffffff; height: 78px; }
+.workspace-label span { color: #687078; letter-spacing: .06em; }
+.workspace-label strong { margin-top: 3px; font-weight: 500; }
+.user-avatar { background: #ece9f4; color: #675780; }
+.save-state { color: #65716a; }
+.page { max-width: 1550px; padding: 42px 40px 64px; }
+.page-title { margin-bottom: 32px; align-items: center; }
+.page-title h1 { font-family: inherit; font-size: 32px; font-weight: 650; letter-spacing: -.045em; margin: 7px 0 10px; }
+.page-title p { line-height: 1.65; max-width: 650px; }
+.eyebrow { color: #69756f; letter-spacing: .09em; font-size: 11px; }
+.btn { border-color: #dce1de; border-radius: 10px; padding: 11px 16px; }
+.btn.primary { background: #28745e; border-color: #28745e; box-shadow: none; }
+.btn.primary:hover { background: #205f4d; }
+.btn.small { padding: 8px 10px; font-size: 12px; }
+.metric-grid { gap: 18px; margin-bottom: 24px; }
+.metric-card { border-radius: 16px; padding: 23px; gap: 7px 14px; box-shadow: 0 2px 5px #202b2403; }
+.metric-symbol { border-radius: 12px; width: 42px; height: 42px; }
+.metric-card>strong { font-family: inherit; font-size: 32px; font-weight: 600; }
+.metric-card>small { font-size: 11px; color: #68756e; }
+.dashboard-grid { gap: 22px; }
+.panel { border-radius: 16px; box-shadow: 0 3px 12px #24382a03; overflow: hidden; }
+.panel-head { padding: 22px 24px 18px; }
+.panel-head h2, .panel-head h3 { font-family: inherit; font-size: 17px; font-weight: 600; margin-top: 6px; }
+.account-row { padding: 18px 24px; gap: 16px; }
+.account-avatar { width: 42px; height: 42px; border-radius: 12px; font-size: 12px; }
+.account-row .grow strong { font-size: 14px; font-weight: 600; }
+.account-row .grow span, .row-progress span { font-size: 12px; }
+.badge { padding: 5px 10px; font-size: 11px; font-weight: 500; }
+.progress { height: 5px; margin-top: 8px; }
+.timeline, .compact-list { padding: 0 24px 18px; }
+.timeline>div, .compact-list>div { padding: 17px 0; }
+.timeline strong, .compact-list strong { font-size: 13px; font-weight: 600; }
+.timeline p, .compact-list span { font-size: 12px; line-height: 1.5; }
+.guardrail { border-radius: 12px; padding: 15px 18px; font-size: 12px; line-height: 1.6; }
+.table-tools { padding: 18px; flex-wrap: wrap; }
+.search { border-radius: 10px; height: 42px; flex: 1; }
+.search input { font-size: 13px; }
+.filter-tabs { border-radius: 10px; }
+.filter-tabs button { font-size: 11px; border-radius: 7px; }
+table { font-size: 13px; }
+th { padding: 14px; font-size: 10px; background: #f8f9fa; }
+td { padding: 18px 14px; }
+tbody tr:hover { background: #fafcfb; }
+.subtext { font-size: 11px; line-height: 1.5; }
+.table-foot { font-size: 12px; padding: 16px 18px; }
+.kanban { gap: 16px; }
+.kanban-column { background: #f0f2f3; border-radius: 14px; padding: 12px; }
+.kanban-head { font-size: 11px; text-transform: none; letter-spacing: 0; padding-bottom: 18px; }
+.submission-card { padding: 18px; border-radius: 12px; }
+.submission-card>strong { font-size: 14px; line-height: 1.5; }
+.submission-card>span { font-size: 12px; }
+.coverage-tags small { font-size: 10px; padding: 4px 7px; border-radius: 6px; }
+.card-progress, .card-foot { font-size: 11px; }
+.modal { border-radius: 20px; }
+.modal-head { padding: 25px; }
+.modal-head h2 { font-family: inherit; font-weight: 600; }
+.modal-intro { font-size: 14px; line-height: 1.7; }
+.checklist>div { padding: 12px 0; }
+.checklist input { font-size: 13px; }
+.detail-aside>a, .detail-aside>span { font-size: 12px; }
+.summary-strip { border-radius: 14px; padding: 22px; }
+.summary-strip>div strong { font-family: inherit; font-size: 26px; }
+.summary-strip>div span { font-size: 12px; }
+.request-table>div { padding: 20px 24px; }
+.request-title { font-size: 14px; }
+.request-table .grow>span, .inline-note { font-size: 12px; }
+.inline-note { padding: 9px; border-radius: 7px; }
+.future-card { border-radius: 18px; }
+.future-card h2 { font-family: inherit; }
+.future-visual { background: #e4eee8; color: #38705b; }
+@media (max-width: 1100px) {
+  .page { padding: 32px 24px 50px; }
+  .filter-tabs { display: flex; flex-wrap: wrap; }
+}
+@media (max-width: 760px) {
+  .page { padding: 28px 16px 48px; }
+  .page-title { align-items: flex-start; flex-wrap: wrap; gap: 15px; }
+  .page-title h1 { font-size: 27px; }
+  .metric-grid { gap: 10px; }
+  .metric-card { padding: 16px; grid-template-columns: 1fr; }
+  .metric-symbol { grid-row: auto; width: 32px; height: 32px; margin-bottom: 5px; }
+  .metric-card>strong { font-size: 28px; }
+  .account-row { padding: 16px; gap: 10px; }
+  .account-row .grow { min-width: 180px; }
+  .filter-tabs { margin-top: 12px; gap: 5px; }
+  .panel-head { padding: 18px; }
+  .row-progress { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *:before, *:after { transition: none !important; }
+}
