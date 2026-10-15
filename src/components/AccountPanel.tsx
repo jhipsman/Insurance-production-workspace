@@ -8,6 +8,7 @@ import { SubmissionWork } from './SubmissionWork'
 import { CarrierRequests } from './CarrierRequests'
 import { ReviewProspect } from '../pages/ProspectResearch'
 import { safeWebLink } from './SubmissionLinks'
+import { RemoveSubmission } from './RemoveSubmission'
 
 export function AccountPanel({target,data,setData,onClose,onStartSubmission}:{target:AccountTarget;data:WorkspaceData;setData:Dispatch<SetStateAction<WorkspaceData>>;onClose:()=>void;onStartSubmission?:(p:Prospect)=>void}) {
   const [tab,setTab]=useState(target.tab??(target.submissionId?'submission':'details'))
@@ -25,7 +26,7 @@ export function AccountPanel({target,data,setData,onClose,onStartSubmission}:{ta
     {submissions.length>1&&<label className="account-choice">Submission<select value={submission?.id} onChange={e=>setChosen(e.target.value)}>{submissions.map(s=><option key={s.id} value={s.id}>{s.accountName} · {s.stage} · {s.id}</option>)}</select></label>}
     {message&&<p className="account-message" role="status">{message}</p>}
     <div hidden={tab!=='details'}><ProspectEditor embedded key={profile.id} prospect={profile} onClose={onClose} onSave={details=>{setData(d=>saveAccount(d,{prospectId:prospect?.id,submissionId:submission?.id},details));setMessage('Account saved across linked views.')}}/></div>
-    {submission&&<><div hidden={tab!=='submission'}><SubmissionWork key={submission.id} submission={submission} setData={setData}/></div><div hidden={tab!=='requests'}><CarrierRequests key={submission.id} submissionId={submission.id} data={data} setData={setData}/></div></>}
+    {submission&&<><div hidden={tab!=='submission'}><SubmissionWork key={`work-${submission.id}`} submission={submission} setData={setData}/><RemoveSubmission key={`remove-${submission.id}`} submission={submission} setData={setData} onRemoved={onClose}/></div><div hidden={tab!=='requests'}><CarrierRequests key={submission.id} submissionId={submission.id} data={data} setData={setData}/></div></>}
     {prospect&&tab==='screening'&&<ReviewProspect embedded prospect={prospect} research={data.research??emptyResearch()} update={fn=>setData(d=>({...d,research:fn(d.research??emptyResearch())}))} close={onClose}/>}
   </Modal>
 }

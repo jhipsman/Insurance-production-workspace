@@ -41,6 +41,13 @@ for a custom line. Changes save automatically and appear on the account card;
 coverage selections are included in backups. Review the editable checklist after
 changing coverages; coverage selections do not remove or overwrite checklist items.
 
+To discard a submission, open its account card, scroll to the bottom of the
+**Submission** tab, and choose **Remove submission**. Confirm the account name,
+then choose **Yes, remove submission** (or **Keep submission** to cancel).
+Removal permanently deletes that submission and its linked carrier requests,
+while preserving the prospect and other submissions. There is no undo; download
+a backup from **Data & backup** beforehand if you need a recoverable copy.
+
 To enter data, click an account name or **Open account** in the Prospecting Desk.
 Use **Add prospect** to enter an account manually. The editor supports organization
 name, industry/operations, address, city/state, annual revenue, employees, contact

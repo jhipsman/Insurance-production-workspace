@@ -199,3 +199,7 @@ tbody tr:hover { background: #fafcfb; }
 @media (prefers-reduced-motion: reduce) {
   *, *:before, *:after { transition: none !important; }
 }
+.remove-submission { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e5d4d4; }
+.remove-submission p { line-height: 1.6; color: #596575; }
+.btn.danger { color: #a12626; border-color: #d8aaaa; background: #fff5f5; }
+.btn.danger:hover { background: #ffe5e5; }
