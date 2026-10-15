@@ -35,6 +35,24 @@ product reference and data-preservation details.
 
 ## Phase 2 — prospect research and screening
 
+### Past-policy PDF review
+
+Open an account's Submission tab and use **Import past policies**. Select up to
+10 text-readable PDFs (25 MB each, first 250 pages per file). PDF text extraction
+runs locally using a bundled PDF.js worker, with no document upload service.
+Review each possible coverage match and its filename/page/excerpt, check the
+lines you want, then choose **Add selected coverages and checklist items**.
+All matches start unchecked: exclusions and blank declaration headings can mention
+coverage that was not purchased. This is a keyword-assisted review, not automated
+coverage verification or a determination of current insurance needs.
+
+Selected lines add generic editable checklist suggestions, initially incomplete.
+Existing coverage, checklist progress, stages and binding dates are preserved.
+Original files and extracted text are not retained in workspace data or backups.
+Scanned pages need external OCR; locked/unreadable files are reported. ZIP and
+XLSX are not supported: extract policy PDFs from ZIPs first and review SOVs manually.
+Check carrier-specific requirements and the complete policy before submitting.
+
 In **Submission Center**, open an account card and use **Coverages** in its Submission
 panel to select or remove coverage lines. Use **Other coverage → Add coverage**
 for a custom line. Changes save automatically and appear on the account card;
