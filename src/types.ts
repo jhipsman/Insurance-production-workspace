@@ -4,6 +4,7 @@ export type SubmissionStage = 'Preparing' | 'Ready to Market' | 'In Market' | 'P
 export type ItemStatus = 'Open' | 'In progress' | 'Complete'
 
 export interface Prospect {
+  sovs?: SovAttachment[]
   id: string
   name: string
   city: string
@@ -27,6 +28,7 @@ export interface Prospect {
 }
 
 export interface ChecklistItem { id: string; label: string; complete: boolean; required: boolean }
+export interface SovAttachment { id:string; name:string; size:number; uploadedAt:string; base64:string }
 export type AccountDetails = Pick<Prospect, 'name' | 'city' | 'state' | 'industry' | 'revenue' | 'employees' | 'crmUrl' | 'notes' | 'priority' | 'contactName' | 'contactEmail' | 'contactPhone' | 'website' | 'streetAddress' | 'renewalDate' | 'followUpDate'>
 
 export interface Submission {

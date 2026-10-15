@@ -1,5 +1,6 @@
 import type { WorkspaceData } from '../types'
 import { validateResearch } from './research'
+import { validateSovs } from './sovs'
 
 export function serializeBackup(data: WorkspaceData): string {
   return JSON.stringify({ exportedAt: new Date().toISOString(), application: 'Northstar Producer Workspace', data }, null, 2)
@@ -13,5 +14,6 @@ export function parseBackup(text: string): WorkspaceData {
     throw new Error('The backup format is incomplete or unsupported.')
   }
   if (data.research !== undefined) validateResearch(data.research)
+  for(const prospect of data.prospects)validateSovs(prospect.sovs)
   return data as WorkspaceData
 }

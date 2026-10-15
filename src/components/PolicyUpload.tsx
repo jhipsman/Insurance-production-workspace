@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { detectPolicyMatches, policyRules, type PolicyMatch } from '../data/policyReview'
 
-export function PolicyUpload({onApply}:{onApply:(coverages:string[])=>void}) {
+export function PolicyUpload({onApply,documentChecklist}:{onApply:(coverages:string[])=>void;documentChecklist?:ReactNode}) {
   const [matches,setMatches]=useState<PolicyMatch[]>([]),[selected,setSelected]=useState<string[]>([])
   const [messages,setMessages]=useState<string[]>([]),[busy,setBusy]=useState(false),[done,setDone]=useState(false)
   const generation=useRef(0)
@@ -40,5 +40,6 @@ export function PolicyUpload({onApply}:{onApply:(coverages:string[])=>void}) {
       {done&&<p role="status">Selections added. Review and edit the checklist below.</p>}
     </>}
     {!busy&&!!messages.length&&!matches.length&&<p>No coverage suggestions available. You can still add coverages manually below.</p>}
+    {!busy&&!!matches.length&&documentChecklist}
   </section>
 }

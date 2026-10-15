@@ -8,14 +8,16 @@ export function useWorkspace() {
   const [data, setData] = useState<WorkspaceData>(()=>removeDemoSubmissions(sampleData))
   const [ready, setReady] = useState(false)
   const [saved, setSaved] = useState(true)
+  const [saveError,setSaveError]=useState('')
 
   useEffect(() => { loadWorkspace().then(stored => { setData(removeDemoSubmissions(stored??sampleData)); setReady(true) }) }, [])
   useEffect(() => {
     if (!ready) return
     setSaved(false)
-    const timer = window.setTimeout(() => saveWorkspace(data).then(() => setSaved(true)), 250)
-    return () => window.clearTimeout(timer)
+    let active=true
+    const timer = window.setTimeout(() => saveWorkspace(data).then(() => {if(active){setSaved(true);setSaveError('')}}).catch(()=>{if(active)setSaveError('Changes could not be saved to this browser. Storage may be full. Download a backup now before closing, then remove unneeded attachments or free browser storage.')}), 250)
+    return () => {active=false;window.clearTimeout(timer)}
   }, [data, ready])
 
-  return { data, setData, ready, saved }
+  return { data, setData, ready, saved, saveError }
 }

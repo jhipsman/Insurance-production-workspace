@@ -35,7 +35,24 @@ product reference and data-preservation details.
 
 ## Phase 2 — prospect research and screening
 
-### Past-policy PDF review
+### Prospect SOV attachments and document checklists
+
+Open a prospect's **Account details → Statements of values (SOVs)** to attach
+XLSX, XLS, CSV or PDF files (5 MB each). No submission is required. Attachments
+save in this browser, remain available from linked submissions' Account details,
+and are included in JSON backups. Download to open in your spreadsheet/PDF app.
+Removal requires confirmation; recover using the original file or a prior backup.
+Keep backups secure: they now contain the full attached SOV files. Wait for
+**Saved locally** before closing. There is no automatic cross-device sync.
+
+After uploading an SOV, matching existing SOV checklist requirements on linked
+submissions can be marked complete only after explicit confirmation. Policy PDF
+review similarly offers existing **Expiring policies / Past policies / Prior
+policies** requirements. File receipt does not verify values or coverage, and does
+not complete loss-run, application, driver-list or other requirements. SOV values
+are not parsed or analyzed. No matching requirement means no completion is offered.
+
+### Past-policy PDF review workflow
 
 Open an account's Submission tab and use **Import past policies**. Select up to
 10 text-readable PDFs (25 MB each, first 250 pages per file). PDF text extraction
